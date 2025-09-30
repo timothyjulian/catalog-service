@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
@@ -51,4 +53,17 @@ allOpen {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+sourceSets {
+    test {
+//        withConvention(KotlinSourceSet::class) {
+//            kotlin.setSrcDirs(listOf("src/test/integration", "src/test/unit"))
+//        }
+
+        java {
+            setSrcDirs(listOf("src/test/integration", "src/test/unit"))
+        }
+
+    }
 }
