@@ -16,7 +16,7 @@ spring:
     console:
       enabled: true
 
-message: Hello from default profile
+message: Hello from default profile (test)
 
 #---
 #spring:
