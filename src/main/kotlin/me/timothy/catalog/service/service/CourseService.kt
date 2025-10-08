@@ -11,7 +11,7 @@ class CourseService(
     val courseRepository: CourseRepository
 ) {
 
-    companion object: KLogging()
+    companion object : KLogging()
 
     fun addCourse(courseDTO: CourseDTO): CourseDTO {
         val courseEntity = courseDTO.let {
@@ -25,6 +25,10 @@ class CourseService(
         return courseEntity.let {
             CourseDTO(it.id, it.name, it.category)
         }
+    }
+
+    fun retrieveAllCourses(): List<CourseDTO> {
+        return courseRepository.findAll().map { course -> CourseDTO(course.id, course.name, course.category) }
     }
 
 }

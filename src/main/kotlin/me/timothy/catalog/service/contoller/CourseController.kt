@@ -17,4 +17,9 @@ class CourseController(
         return courseService.addCourse(courseDTO)
     }
 
+    @GetMapping
+    fun retrieveAllCourses() : List<CourseDTO> {
+        return courseService.retrieveAllCourses()
+    }
+
 }
