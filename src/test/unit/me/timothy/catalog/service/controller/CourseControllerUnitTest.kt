@@ -51,4 +51,24 @@ class CourseControllerUnitTest {
         println("coursesDTO $returnResult")
         Assertions.assertEquals(returnResult!!.size, 3)
     }
+
+    @Test
+    fun updateCourse() {
+        val courseDTO = CourseDTO(
+            null,
+            "Build RestFul APis using SpringBoot and Kotlin 999", "Development"
+        )
+
+        every { courseServiceMockk.updateCourse(any(), any()) }.returns(courseDTO.copy(id = 1))
+
+        val responseBody = webTestClient.put().uri("/v1/courses/{courseId}", 1).bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(
+                CourseDTO::class.java
+            ).returnResult()
+            .responseBody
+
+        Assertions.assertEquals("Build RestFul APis using SpringBoot and Kotlin 999", responseBody!!.name)
+    }
 }
