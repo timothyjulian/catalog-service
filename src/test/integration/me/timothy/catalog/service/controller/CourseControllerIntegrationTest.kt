@@ -58,8 +58,6 @@ class CourseControllerIntegrationTest {
 
     @Test
     fun updateCourse() {
-
-
         val course = Course(
             null,
             "Build RestFul APis using SpringBoot and Kotlin", "Development"
@@ -82,4 +80,20 @@ class CourseControllerIntegrationTest {
 
         Assertions.assertEquals("Build RestFul APis using SpringBoot and Kotlin 999", responseBody!!.name)
     }
+
+
+    @Test
+    fun deleteCourse() {
+        val course = Course(
+            null,
+            "Build RestFul APis using SpringBoot and Kotlin", "Development"
+        )
+        courseRepository.save(course)
+
+        webTestClient.delete().uri("/v1/courses/{courseId}", course.id)
+            .exchange()
+            .expectStatus().isNoContent
+    }
+
+
 }

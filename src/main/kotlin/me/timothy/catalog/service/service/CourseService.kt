@@ -44,7 +44,19 @@ class CourseService(
 
                 CourseDTO(it.id, it.name, it.category)
             }
-        } else{
+        } else {
+            throw CourseNotFoundException("No course found for: $courseId")
+        }
+    }
+
+    fun deleteCourse(courseId: Int) {
+        val existingCourse = courseRepository.findById(courseId)
+
+        return if (existingCourse.isPresent) {
+            existingCourse.get().let {
+                courseRepository.deleteById(courseId)
+            }
+        } else {
             throw CourseNotFoundException("No course found for: $courseId")
         }
     }
