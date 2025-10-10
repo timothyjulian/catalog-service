@@ -41,6 +41,17 @@ class CourseControllerUnitTest {
         }
     }
 
+
+    @Test
+    fun addCourse_validation() {
+        val courseDTO = CourseDTO(null, "", "Tim")
+
+        every { courseServiceMockk.addCourse(any()) }.returns(courseDTO(1))
+
+        webTestClient.post().uri("/v1/courses").bodyValue(courseDTO).exchange().expectStatus().isBadRequest
+
+    }
+
     @Test
     fun retrieveAllCourses() {
         every { courseServiceMockk.retrieveAllCourses() }.returnsMany(

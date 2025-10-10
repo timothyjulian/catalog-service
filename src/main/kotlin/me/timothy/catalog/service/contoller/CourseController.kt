@@ -1,22 +1,25 @@
 package me.timothy.catalog.service.contoller
 
+import jakarta.validation.Valid
 import me.timothy.catalog.service.dto.CourseDTO
 import me.timothy.catalog.service.service.CourseService
 import mu.KLogging
 import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/v1/courses")
+@Validated
 class CourseController(
     val courseService: CourseService
 ) {
 
-    companion object: KLogging()
+    companion object : KLogging()
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addCourse(@RequestBody courseDTO: CourseDTO): CourseDTO {
+    fun addCourse(@RequestBody @Valid courseDTO: CourseDTO): CourseDTO {
         return courseService.addCourse(courseDTO)
     }
 
