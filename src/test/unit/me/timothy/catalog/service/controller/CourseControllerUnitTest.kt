@@ -2,6 +2,8 @@ package me.timothy.catalog.service.controller
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.just
+import io.mockk.runs
 import me.timothy.catalog.service.contoller.CourseController
 import me.timothy.catalog.service.dto.CourseDTO
 import me.timothy.catalog.service.service.CourseService
@@ -70,5 +72,14 @@ class CourseControllerUnitTest {
             .responseBody
 
         Assertions.assertEquals("Build RestFul APis using SpringBoot and Kotlin 999", responseBody!!.name)
+    }
+
+    @Test
+    fun deleteCourse() {
+        every { courseServiceMockk.deleteCourse(any()) } just runs
+
+        webTestClient.delete().uri("/v1/courses/{courseId}", 1)
+            .exchange()
+            .expectStatus().isNoContent
     }
 }
