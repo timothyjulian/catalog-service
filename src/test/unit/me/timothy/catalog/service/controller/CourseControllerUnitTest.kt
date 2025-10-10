@@ -27,7 +27,7 @@ class CourseControllerUnitTest {
     fun addCourse() {
         val courseDTO = CourseDTO(null, "Test Course", "Tim")
 
-        every { courseServiceMockk.addCourse(any()) } returns courseDTO(1)
+        every { courseServiceMockk.addCourse(any()) }.returns(courseDTO(1))
 
         val responseBody =
             webTestClient.post().uri("/v1/courses").bodyValue(courseDTO).exchange().expectStatus().isCreated.expectBody(
@@ -37,5 +37,18 @@ class CourseControllerUnitTest {
         Assertions.assertTrue {
             responseBody!!.id != null
         }
+    }
+
+    @Test
+    fun retrieveAllCourses() {
+        every { courseServiceMockk.retrieveAllCourses() }.returnsMany(
+            listOf(courseDTO(1), courseDTO(2), courseDTO(3))
+        )
+        val returnResult =
+            webTestClient.get().uri("/v1/courses").exchange().expectStatus().isOk.expectBodyList(CourseDTO::class.java)
+                .returnResult().responseBody
+
+        println("coursesDTO $returnResult")
+        Assertions.assertEquals(returnResult!!.size, 3)
     }
 }
