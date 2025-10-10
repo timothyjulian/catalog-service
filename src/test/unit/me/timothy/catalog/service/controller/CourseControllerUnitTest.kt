@@ -55,6 +55,19 @@ class CourseControllerUnitTest {
     }
 
     @Test
+    fun addCourse_runTimeException() {
+        val courseDTO = CourseDTO(null, "Test Course", "Tim")
+
+        val errorMessage = "unexpected error occurred";
+        every { courseServiceMockk.addCourse(any()) }.throws(RuntimeException(errorMessage))
+
+        val responseBody = webTestClient.post().uri("/v1/courses").bodyValue(courseDTO).exchange()
+            .expectStatus().is5xxServerError.expectBody(String::class.java).returnResult().responseBody
+
+        Assertions.assertEquals(responseBody, errorMessage)
+    }
+
+    @Test
     fun retrieveAllCourses() {
         every { courseServiceMockk.retrieveAllCourses() }.returnsMany(
             listOf(courseDTO(1), courseDTO(2), courseDTO(3))
