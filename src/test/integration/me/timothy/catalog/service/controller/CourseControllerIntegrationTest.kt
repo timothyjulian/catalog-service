@@ -1,6 +1,7 @@
 package me.timothy.catalog.service.controller
 
 import me.timothy.catalog.service.dto.CourseDTO
+import me.timothy.catalog.service.entity.Course
 import me.timothy.catalog.service.repository.CourseRepository
 import me.timothy.catalog.service.util.courseEntityList
 import org.junit.jupiter.api.Assertions
@@ -53,5 +54,32 @@ class CourseControllerIntegrationTest {
 
         println("coursesDTO $returnResult")
         Assertions.assertEquals(returnResult!!.size, 3)
+    }
+
+    @Test
+    fun updateCourse() {
+
+
+        val course = Course(
+            null,
+            "Build RestFul APis using SpringBoot and Kotlin", "Development"
+        )
+        courseRepository.save(course)
+
+
+        val courseDTO = CourseDTO(
+            null,
+            "Build RestFul APis using SpringBoot and Kotlin 999", "Development"
+        )
+
+        val responseBody = webTestClient.put().uri("/v1/courses/{courseId}", course.id).bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(
+                CourseDTO::class.java
+            ).returnResult()
+            .responseBody
+
+        Assertions.assertEquals("Build RestFul APis using SpringBoot and Kotlin 999", responseBody!!.name)
     }
 }
