@@ -27,7 +27,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun addCourse() {
-        val courseDTO = CourseDTO(null, "Test Course", "Tim")
+        val courseDTO = CourseDTO(null, "Test Course", "Tim", 1)
 
         every { courseServiceMockk.addCourse(any()) }.returns(courseDTO(1))
 
@@ -44,7 +44,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun addCourse_validation() {
-        val courseDTO = CourseDTO(null, "", "Tim")
+        val courseDTO = CourseDTO(null, "", "Tim", 1)
 
         every { courseServiceMockk.addCourse(any()) }.returns(courseDTO(1))
 
@@ -56,7 +56,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun addCourse_runTimeException() {
-        val courseDTO = CourseDTO(null, "Test Course", "Tim")
+        val courseDTO = CourseDTO(null, "Test Course", "Tim", 1)
 
         val errorMessage = "unexpected error occurred";
         every { courseServiceMockk.addCourse(any()) }.throws(RuntimeException(errorMessage))

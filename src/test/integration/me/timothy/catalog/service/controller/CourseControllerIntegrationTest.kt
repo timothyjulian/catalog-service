@@ -3,7 +3,9 @@ package me.timothy.catalog.service.controller
 import me.timothy.catalog.service.dto.CourseDTO
 import me.timothy.catalog.service.entity.Course
 import me.timothy.catalog.service.repository.CourseRepository
+import me.timothy.catalog.service.repository.InstructorRepository
 import me.timothy.catalog.service.util.courseEntityList
+import me.timothy.catalog.service.util.instructorEntity
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,16 +28,27 @@ class CourseControllerIntegrationTest {
     @Autowired
     lateinit var courseRepository: CourseRepository
 
+    @Autowired
+    lateinit var instructorRepository: InstructorRepository
+
     @BeforeEach
     fun setUp() {
         courseRepository.deleteAll()
-        val courseEntityList = courseEntityList()
+        instructorRepository.deleteAll()
+
+        val instructorEntity = instructorEntity()
+        instructorRepository.save(instructorEntity)
+
+        val courseEntityList = courseEntityList(instructorEntity)
         courseRepository.saveAll(courseEntityList)
     }
 
     @Test
     fun addCourse() {
-        val courseDTO = CourseDTO(null, "Test Course", "Tim")
+
+        val instructorEntity = instructorRepository.findAll().first()
+
+        val courseDTO = CourseDTO(null, "Test Course", "Tim", instructorEntity.id)
 
         val responseBody =
             webTestClient.post().uri("/v1/courses").bodyValue(courseDTO).exchange().expectStatus().isCreated.expectBody(
@@ -74,16 +87,19 @@ class CourseControllerIntegrationTest {
 
     @Test
     fun updateCourse() {
+        val instructorEntity = instructorRepository.findAll().first()
         val course = Course(
             null,
-            "Build RestFul APis using SpringBoot and Kotlin", "Development"
+            "Build RestFul APis using SpringBoot and Kotlin", "Development",
+            instructorEntity
         )
         courseRepository.save(course)
 
 
         val courseDTO = CourseDTO(
             null,
-            "Build RestFul APis using SpringBoot and Kotlin 999", "Development"
+            "Build RestFul APis using SpringBoot and Kotlin 999", "Development",
+            instructorEntity.id
         )
 
         val responseBody = webTestClient.put().uri("/v1/courses/{courseId}", course.id).bodyValue(courseDTO)
@@ -100,9 +116,11 @@ class CourseControllerIntegrationTest {
 
     @Test
     fun deleteCourse() {
+        val instructorEntity = instructorRepository.findAll().first()
         val course = Course(
             null,
-            "Build RestFul APis using SpringBoot and Kotlin", "Development"
+            "Build RestFul APis using SpringBoot and Kotlin", "Development",
+            instructorEntity
         )
         courseRepository.save(course)
 
