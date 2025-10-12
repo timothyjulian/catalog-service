@@ -69,7 +69,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun retrieveAllCourses() {
-        every { courseServiceMockk.retrieveAllCourses() }.returnsMany(
+        every { courseServiceMockk.retrieveAllCourses(any()) }.returnsMany(
             listOf(courseDTO(1), courseDTO(2), courseDTO(3))
         )
         val returnResult =
