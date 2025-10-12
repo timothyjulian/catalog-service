@@ -24,7 +24,7 @@ class GreetingControllerIntegrationTest {
                 String::class.java
             ).returnResult()
 
-        Assertions.assertEquals("$name, Hello from default profile", returnResult.responseBody)
+        Assertions.assertEquals("$name, Hello from test profile", returnResult.responseBody)
     }
 
 }
